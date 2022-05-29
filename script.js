@@ -12,3 +12,31 @@ const NOTE_DETAILS = [
   { note: "Bb", key: "J", frequency: 466.164 },
   { note: "B", key: "M", frequency: 493.883 }
 ]
+
+document.addEventListener('keydown', (e) => {
+  if (e.repeat === true) return
+  const keyCode = e.code
+  const noteDetail = getNoteDetail(keyCode)
+  if (noteDetail === null) return
+  noteDetail.active = true
+  playNotes()
+})
+
+document.addEventListener('keyup', (e) => {
+  const keyCode = e.code
+  const noteDetail = getNoteDetail(keyCode)
+  if (noteDetail === null) return
+  noteDetail.active = false
+  playNotes()
+})
+
+function getNoteDetail(key) {
+  return NOTE_DETAILS.find(n => `Key${n.key}` === key)
+}
+
+function playNotes() {
+  NOTE_DETAILS.forEach((n) => {
+    const keyElement = document.querySelector(`[data-note="${n.note}"]`)
+    keyElement.classList.toggle('active', n.active || false)
+  })
+}
